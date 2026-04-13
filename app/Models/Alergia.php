@@ -1,0 +1,14 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Alergia extends Model
+{
+    //
+    protected $table="alergias";
+    protected $primaryKey = 'id_alergia';
+    protected $fillable=["id_alergia","id_ninio","id_ingrediente"];
+    public $timestamps = false;
+}
