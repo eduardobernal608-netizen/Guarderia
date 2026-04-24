@@ -18,9 +18,7 @@ use App\Http\Controllers\RegistroCuentaController;
 
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
 
 Route::resource("abonos",AbonoController::class);
 

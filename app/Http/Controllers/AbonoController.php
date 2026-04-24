@@ -10,7 +10,37 @@ class AbonoController extends Controller
 {
     public function index()
     {
-        $abonos = Abono::all();
+        /**
+         *
+         * SELECT
+         * abonos.cantidad, abonos.fecha, personas.nom, registro_cuentas.cuenta
+         * FROM abonos, registro_cuentas, familiares, ninios, personas
+         * WHERE abonos.id_regcuenta = registro_cuentas.id_regcuenta
+         * AND registro_cuentas.id_fam = familiares.id_fam
+         * AND familiares.id_ninio = ninios.id_ninio
+         * AND ninios.id_persona = personas.id_persona;
+         */
+       /* $abonos = Abono::join("registro_cuentas","registro_cuentas.id_regcuenta","abonos.id_regcuenta")
+        ->join("familiares","familiares.id_fam", "registro_cuentas.id_fam")
+        ->join("ninios","ninios.id_ninio","familiares.id_ninio")
+        ->join("personas","personas.id_persona", "ninios.id_persona")
+            ->select("abonos.id_abono","abonos.cantidad","abonos.fecha", "personas.nom as nombre", "registro_cuentas.cuenta")
+        ->get();*/
+        $abonos = Abono::join("registro_cuentas", "registro_cuentas.id_regcuenta", "abonos.id_regcuenta")
+            ->join("familiares", "familiares.id_fam", "registro_cuentas.id_fam")
+            ->join("ninios", "ninios.id_ninio", "familiares.id_ninio")
+            ->join("personas", "personas.id_persona", "ninios.id_persona")
+            ->join("personas as personas_tutor", "personas_tutor.id_persona", "familiares.id_persona")
+            ->select(
+                "abonos.id_abono",
+                "abonos.cantidad",
+                "abonos.fecha",
+                "personas.nom as nombre_ninio",
+                "personas_tutor.nom as nombre_tutor",
+                "registro_cuentas.cuenta"
+            )
+            ->get();
+   
         return view('abonos.index', compact('abonos'));
     }
 
